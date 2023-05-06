@@ -1,7 +1,7 @@
 use crate::tuples::coordinates::Coordinates;
 use crate::tuples::vector::Vector;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Point(f64, f64, f64);
 
 impl Point {
