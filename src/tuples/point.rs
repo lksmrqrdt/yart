@@ -12,7 +12,7 @@ impl Point {
 
 impl Default for Point {
     fn default() -> Self {
-        Point(0.0, 0.0, 0.0)
+        Point::new(0.0, 0.0, 0.0)
     }
 }
 

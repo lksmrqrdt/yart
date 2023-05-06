@@ -16,12 +16,12 @@ struct Environment {
 }
 
 fn main() {
-    let mut projectile = Projectile{
+    let mut projectile = Projectile {
         position: Point::new(0.0, 1.0, 0.0),
         velocity: Vector::new(1.0, 1.0, 0.0).normalize(),
     };
 
-    let environment = Environment{
+    let environment = Environment {
         gravity: Vector::new(0.0, -0.1, 0.0),
         wind: Vector::new(-0.01, 0.0, 0.0),
     };
@@ -36,5 +36,5 @@ fn tick(environment: Environment, projectile: Projectile) -> Projectile {
     let position = projectile.position + projectile.velocity;
     let velocity = projectile.velocity + environment.gravity + environment.wind;
 
-    return Projectile{position, velocity}
+    Projectile { position, velocity }
 }
