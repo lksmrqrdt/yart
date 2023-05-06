@@ -46,6 +46,46 @@ impl std::ops::Add<Vector> for Point {
     }
 }
 
+impl std::ops::Sub for Point {
+    type Output = Vector;
+
+    fn sub(self, rhs: Point) -> Self::Output {
+        Vector::new(self.x() - rhs.x(), self.y() - rhs.y(), self.z() - rhs.z())
+    }
+}
+
+impl std::ops::Sub<Vector> for Point {
+    type Output = Point;
+
+    fn sub(self, rhs: Vector) -> Self::Output {
+        Point::new(self.x() - rhs.x(), self.y() - rhs.y(), self.z() - rhs.z())
+    }
+}
+
+impl std::ops::Neg for Point {
+    type Output = Point;
+
+    fn neg(self) -> Self::Output {
+        Point::new(-self.x(), -self.y(), -self.z())
+    }
+}
+
+impl std::ops::Mul<f64> for Point {
+    type Output = Point;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Point::new(self.x() * rhs, self.y() * rhs, self.z() * rhs)
+    }
+}
+
+impl std::ops::Div<f64> for Point {
+    type Output = Point;
+
+    fn div(self, rhs: f64) -> Self::Output {
+        Point::new(self.x() / rhs, self.y() / rhs, self.z() / rhs)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -61,10 +101,10 @@ mod tests {
 
     #[test]
     fn default_point_constructor() {
-        let default_point = Point::default();
-        let custom_point = Point::new(0.0, 0.0, 0.0);
+        let point = Point::default();
+        let zero_point = Point::new(0.0, 0.0, 0.0);
 
-        assert_eq!(custom_point, default_point);
+        assert_eq!(zero_point, point);
     }
 
     #[test]
@@ -74,5 +114,55 @@ mod tests {
 
         let desired_result = Point::new(1.0, 1.0, 6.0);
         assert_eq!(desired_result, point + vector);
+    }
+
+    #[test]
+    fn sub_point() {
+        let point_a = Point::new(3.0, 2.0, 1.0);
+        let point_b = Point::new(5.0, 6.0, 7.0);
+
+        let desired_result = Vector::new(-2.0, -4.0, -6.0);
+        assert_eq!(desired_result, point_a - point_b);
+    }
+
+    #[test]
+    fn sub_point_vector() {
+        let point = Point::new(3.0, 2.0, 1.0);
+        let vector = Vector::new(5.0, 6.0, 7.0);
+
+        let desired_result = Point::new(-2.0, -4.0, -6.0);
+        assert_eq!(desired_result, point - vector);
+    }
+
+    #[test]
+    fn neg_point() {
+        let point = Point::new(1.0, -2.0, 3.0);
+
+        let desired_result = Point::new(-1.0, 2.0, -3.0);
+        assert_eq!(desired_result, -point);
+    }
+
+    #[test]
+    fn mul_point_scalar() {
+        let point = Point::new(1.0, -2.0, 3.0);
+
+        let desired_result = Point::new(3.5, -7.0, 10.5);
+        assert_eq!(desired_result, point * 3.5);
+    }
+
+    #[test]
+    fn mul_point_fraction() {
+        let point = Point::new(1.0, -2.0, 3.0);
+
+        let desired_result = Point::new(0.5, -1.0, 1.5);
+        assert_eq!(desired_result, point * 0.5);
+    }
+
+    #[test]
+    fn div_point() {
+        let point = Point::new(1.0, -2.0, 3.0);
+
+        let desired_result = Point::new(0.5, -1.0, 1.5);
+        assert_eq!(desired_result, point / 2.0);
     }
 }

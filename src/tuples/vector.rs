@@ -38,6 +38,14 @@ impl Coordinates for Vector {
     }
 }
 
+impl std::ops::Add for Vector {
+    type Output = Vector;
+
+    fn add(self, rhs: Vector) -> Self::Output {
+        Vector::new(self.x() + rhs.x(), self.y() + rhs.y(), self.z() + rhs.z())
+    }
+}
+
 impl std::ops::Add<Point> for Vector {
     type Output = Point;
 
@@ -46,11 +54,35 @@ impl std::ops::Add<Point> for Vector {
     }
 }
 
-impl std::ops::Add<Vector> for Vector {
+impl std::ops::Sub for Vector {
     type Output = Vector;
 
-    fn add(self, rhs: Vector) -> Self::Output {
-        Vector::new(self.x() + rhs.x(), self.y() + rhs.y(), self.z() + rhs.z())
+    fn sub(self, rhs: Vector) -> Self::Output {
+        Vector::new(self.x() - rhs.x(), self.y() - rhs.y(), self.z() - rhs.z())
+    }
+}
+
+impl std::ops::Neg for Vector {
+    type Output = Vector;
+
+    fn neg(self) -> Self::Output {
+        Vector::new(-self.x(), -self.y(), -self.z())
+    }
+}
+
+impl std::ops::Mul<f64> for Vector {
+    type Output = Vector;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Vector::new(self.x() * rhs, self.y() * rhs, self.z() * rhs)
+    }
+}
+
+impl std::ops::Div<f64> for Vector {
+    type Output = Vector;
+
+    fn div(self, rhs: f64) -> Self::Output {
+        Vector::new(self.x() / rhs, self.y() / rhs, self.z() / rhs)
     }
 }
 
@@ -76,6 +108,15 @@ mod tests {
     }
 
     #[test]
+    fn add_vector() {
+        let vector_a = Vector::new(-2.0, 3.0, 1.0);
+        let vector_b = Vector::new(3.0, -2.0, 5.0);
+
+        let desired_result = Vector::new(1.0, 1.0, 6.0);
+        assert_eq!(desired_result, vector_a + vector_b);
+    }
+
+    #[test]
     fn add_vector_point() {
         let vector = Vector::new(-2.0, 3.0, 1.0);
         let point = Point::new(3.0, -2.0, 5.0);
@@ -85,11 +126,53 @@ mod tests {
     }
 
     #[test]
-    fn add_vector_vector() {
-        let vector_a = Vector::new(-2.0, 3.0, 1.0);
-        let vector_b = Vector::new(3.0, -2.0, 5.0);
+    fn sub_vector() {
+        let vector_a = Vector::new(3.0, 2.0, 1.0);
+        let vector_b = Vector::new(5.0, 6.0, 7.0);
 
-        let desired_result = Vector::new(1.0, 1.0, 6.0);
-        assert_eq!(desired_result, vector_a + vector_b);
+        let desired_result = Vector::new(-2.0, -4.0, -6.0);
+
+        assert_eq!(desired_result, vector_a - vector_b);
+    }
+
+    #[test]
+    fn sub_vector_zero() {
+        let vector = Vector::new(1.0, -2.0, 3.0);
+        let zero = Vector::new(0.0, 0.0, 0.0);
+
+        let desired_result = Vector::new(-1.0, 2.0, -3.0);
+        assert_eq!(desired_result, zero - vector);
+    }
+
+    #[test]
+    fn neg_vector() {
+        let vector = Vector::new(1.0, -2.0, 3.0);
+
+        let desired_result = Vector::new(-1.0, 2.0, -3.0);
+        assert_eq!(desired_result, -vector);
+    }
+
+    #[test]
+    fn mul_vector_scalar() {
+        let vector = Vector::new(1.0, -2.0, 3.0);
+
+        let desired_result = Vector::new(3.5, -7.0, 10.5);
+        assert_eq!(desired_result, vector * 3.5);
+    }
+
+    #[test]
+    fn mul_vector_fraction() {
+        let vector = Vector::new(1.0, -2.0, 3.0);
+
+        let desired_result = Vector::new(0.5, -1.0, 1.5);
+        assert_eq!(desired_result, vector * 0.5);
+    }
+
+    #[test]
+    fn div_vector() {
+        let vector = Vector::new(1.0, -2.0, 3.0);
+
+        let desired_result = Vector::new(0.5, -1.0, 1.5);
+        assert_eq!(desired_result, vector / 2.0);
     }
 }
