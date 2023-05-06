@@ -1,7 +1,8 @@
 use crate::tuples::coordinates::Coordinates;
 use crate::tuples::point::Point;
+use crate::tuples::scalar::Scalar;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Vector(f64, f64, f64);
 
 impl Vector {
@@ -35,6 +36,36 @@ impl Coordinates for Vector {
 
     fn z(&self) -> f64 {
         self.2
+    }
+}
+
+impl Scalar for Vector {
+    type Output = Vector;
+
+    fn magnitude(&self) -> f64 {
+        (self.x().powi(2) + self.y().powi(2) + self.z().powi(2)).sqrt()
+    }
+
+    fn normalize(&self) -> Self::Output {
+        let magnitude = self.magnitude();
+
+        Vector::new(
+            self.x() / magnitude,
+            self.y() / magnitude,
+            self.z() / magnitude,
+        )
+    }
+
+    fn dot_product(&self, rhs: Vector) -> f64 {
+        self.x() * rhs.x() + self.y() * rhs.y() + self.z() * rhs.z()
+    }
+
+    fn cross_product(&self, rhs: Self) -> Self::Output {
+        Vector::new(
+            self.y() * rhs.z() - self.z() * rhs.y(),
+            self.z() * rhs.x() - self.x() * rhs.z(),
+            self.x() * rhs.y() - self.y() * rhs.x(),
+        )
     }
 }
 
@@ -174,5 +205,90 @@ mod tests {
 
         let desired_result = Vector::new(0.5, -1.0, 1.5);
         assert_eq!(desired_result, vector / 2.0);
+    }
+
+    #[test]
+    fn magnitude_vector_x() {
+        let vector = Vector::new(1.0, 0.0, 0.0);
+
+        let desired_result = 1.0;
+        assert_eq!(desired_result, vector.magnitude());
+    }
+
+    #[test]
+    fn magnitude_vector_y() {
+        let vector = Vector::new(0.0, 1.0, 0.0);
+
+        let desired_result = 1.0;
+        assert_eq!(desired_result, vector.magnitude());
+    }
+
+    #[test]
+    fn magnitude_vector_z() {
+        let vector = Vector::new(0.0, 0.0, 1.0);
+
+        let desired_result = 1.0;
+        assert_eq!(desired_result, vector.magnitude());
+    }
+
+    #[test]
+    fn magnitude_vector_positive() {
+        let vector = Vector::new(1.0, 2.0, 3.0);
+
+        let desired_result = f64::sqrt(14.0);
+        assert_eq!(desired_result, vector.magnitude());
+    }
+
+    #[test]
+    fn magnitude_vector_negative() {
+        let vector = Vector::new(-1.0, -2.0, -3.0);
+
+        let desired_result = f64::sqrt(14.0);
+        assert_eq!(desired_result, vector.magnitude());
+    }
+
+    #[test]
+    fn normalize_vector_x() {
+        let vector = Vector::new(4.0, 0.0, 0.0);
+
+        let desired_result = Vector::new(1.0, 0.0, 0.0);
+        assert_eq!(desired_result, vector.normalize());
+    }
+
+    #[test]
+    fn normalize_vector_all() {
+        let vector = Vector::new(1.0, 2.0, 3.0);
+
+        let magnitude = f64::sqrt(14.0);
+        let desired_result = Vector::new(1.0 / magnitude, 2.0 / magnitude, 3.0 / magnitude);
+        assert_eq!(desired_result, vector.normalize());
+    }
+
+    #[test]
+    fn magnitude_of_normalized_vector() {
+        let vector = Vector::new(1.0, 2.0, 3.0);
+        let normalized = vector.normalize();
+
+        let desired_result = 1.0;
+        assert_eq!(desired_result, normalized.magnitude())
+    }
+
+    #[test]
+    fn dot_product_vector() {
+        let vector_a = Vector::new(1.0, 2.0, 3.0);
+        let vector_b = Vector::new(2.0, 3.0, 4.0);
+
+        let desired_result = 20.0;
+        assert_eq!(desired_result, vector_a.dot_product(vector_b))
+    }
+
+    #[test]
+    fn cross_product_vector() {
+        let vector_a = Vector::new(1.0, 2.0, 3.0);
+        let vector_b = Vector::new(2.0, 3.0, 4.0);
+
+        let desired_result = Vector::new(-1.0, 2.0, -1.0);
+        assert_eq!(desired_result, vector_a.cross_product(vector_b));
+        assert_eq!(-desired_result, vector_b.cross_product(vector_a));
     }
 }
