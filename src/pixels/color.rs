@@ -1,12 +1,29 @@
-use crate::canvas::rgb::RGB;
+use crate::pixels::rgb::RGB;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Color(f64, f64, f64);
+pub struct Color {
+    r: f64,
+    g: f64,
+    b: f64,
+}
 
 impl Color {
-    fn new(r: f64, g: f64, b: f64) -> Self {
-        Color(r, g, b)
+    pub fn new(r: f64, g: f64, b: f64) -> Self {
+        Color { r, g, b }
     }
+
+    pub fn to_tuple(&self) -> (u8, u8, u8) {
+        let r = into_u8(self.r());
+        let g = into_u8(self.g());
+        let b = into_u8(self.b());
+
+        (r, g, b)
+    }
+}
+
+fn into_u8(hue: f64) -> u8 {
+    let converted = (hue * 255.0) as u8;
+    converted.max(0).min(255)
 }
 
 impl Default for Color {
@@ -25,15 +42,15 @@ impl PartialEq for Color {
 
 impl RGB for Color {
     fn r(&self) -> f64 {
-        self.0
+        self.r
     }
 
     fn g(&self) -> f64 {
-        self.1
+        self.g
     }
 
     fn b(&self) -> f64 {
-        self.2
+        self.b
     }
 }
 

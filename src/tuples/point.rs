@@ -2,11 +2,15 @@ use crate::tuples::coordinates::Coordinates;
 use crate::tuples::vector::Vector;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Point(f64, f64, f64);
+pub struct Point {
+    x: f64,
+    y: f64,
+    z: f64,
+}
 
 impl Point {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
-        Point(x, y, z)
+        Point { x, y, z }
     }
 }
 
@@ -26,15 +30,15 @@ impl PartialEq for Point {
 
 impl Coordinates for Point {
     fn x(&self) -> f64 {
-        self.0
+        self.x
     }
 
     fn y(&self) -> f64 {
-        self.1
+        self.y
     }
 
     fn z(&self) -> f64 {
-        self.2
+        self.z
     }
 }
 

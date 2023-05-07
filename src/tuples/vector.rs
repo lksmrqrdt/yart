@@ -3,11 +3,15 @@ use crate::tuples::point::Point;
 use crate::tuples::scalar::Scalar;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Vector(f64, f64, f64);
+pub struct Vector {
+    x: f64,
+    y: f64,
+    z: f64,
+}
 
 impl Vector {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
-        Vector(x, y, z)
+        Vector { x, y, z }
     }
 }
 
@@ -27,15 +31,15 @@ impl PartialEq for Vector {
 
 impl Coordinates for Vector {
     fn x(&self) -> f64 {
-        self.0
+        self.x
     }
 
     fn y(&self) -> f64 {
-        self.1
+        self.y
     }
 
     fn z(&self) -> f64 {
-        self.2
+        self.z
     }
 }
 
@@ -123,7 +127,7 @@ mod tests {
 
     #[test]
     fn new_vector_constructor() {
-        let vector = Vector(4.3, -4.2, 3.1);
+        let vector = Vector::new(4.3, -4.2, 3.1);
 
         assert_eq!(4.3, vector.x());
         assert_eq!(-4.2, vector.y());
@@ -133,7 +137,7 @@ mod tests {
     #[test]
     fn default_vector_constructor() {
         let default_vector = Vector::default();
-        let custom_vector = Vector(0.0, 0.0, 0.0);
+        let custom_vector = Vector::new(0.0, 0.0, 0.0);
 
         assert_eq!(custom_vector, default_vector);
     }
