@@ -1,4 +1,4 @@
-use crate::pixels::rgb::RGB;
+use crate::pixels::rgb::Rgb;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Color {
@@ -40,7 +40,7 @@ impl PartialEq for Color {
     }
 }
 
-impl RGB for Color {
+impl Rgb for Color {
     fn r(&self) -> f64 {
         self.r
     }

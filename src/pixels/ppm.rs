@@ -36,15 +36,15 @@ impl PPM {
         body
     }
 
-    pub fn ppm(&self) -> Vec<u8> {
+    pub fn get(&self) -> Vec<u8> {
         self.content.clone()
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::pixels::color::Color;
     use super::*;
+    use crate::pixels::color::Color;
 
     #[test]
     fn new_ppm_header() {
@@ -96,6 +96,6 @@ mod tests {
         desired_result.append(&mut PPM::create_header(&canvas));
         desired_result.append(&mut PPM::create_body(&canvas));
 
-        assert_eq!(desired_result, ppm.ppm());
+        assert_eq!(desired_result, ppm.get());
     }
 }
