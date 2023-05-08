@@ -4,11 +4,11 @@ on:
   - pull_request
 jobs:
   test:
-    name: Code testing
+    name: Code Linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: action/checkout@v3
+        uses: actions/checkout@v3
       - name: Update the Toolchain
         run: |
           rustup update
@@ -17,19 +17,15 @@ jobs:
         run: |
           cargo fmt -- --check
           cargo clippy --all-targets --all-features -- -D warnings
-      - name: Run the Tests
-        run: |
-          cargo check
-          cargo test --all
   coverage:
-    name: Code Coverage
+    name: Code Testing & Coverage
     runs-on: ubuntu-latest
     container:
       image: xd009642/tarpaulin:develop-nightly
       options: --security-opt seccomp=unconfined
     steps:
       - name: Checkout the repository
-        uses: action/checkout@v3
+        uses: actions/checkout@v3
       - name: Generate the Code Coverage report
         run: cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out Xml
       - name: Upload the Report to Codecov
