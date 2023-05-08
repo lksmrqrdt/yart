@@ -1,0 +1,39 @@
+name: Code Testing
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: Code testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: action/checkout@v3
+      - name: Update the Toolchain
+        run: |
+          rustup update
+          rustup component add clippy
+      - name: Lint the Code
+        run: |
+          cargo fmt -- --check
+          cargo clippy --all-targets --all-features -- -D warnings
+      - name: Run the Tests
+        run: |
+          cargo check
+          cargo test --all
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    container:
+      image: xd009642/tarpaulin:develop-nightly
+      options: --security-opt seccomp=unconfined
+    steps:
+      - name: Checkout the repository
+        uses: action/checkout@v3
+      - name: Generate the Code Coverage report
+        run: cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out Xml
+      - name: Upload the Report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
