@@ -1,10 +1,10 @@
-use raytracer_rs::pixels::canvas::Canvas;
-use raytracer_rs::pixels::color::Color;
-use raytracer_rs::pixels::ppm::PPM;
-use raytracer_rs::tuples::coordinates::Coordinates;
-use raytracer_rs::tuples::point::Point;
-use raytracer_rs::tuples::scalar::Scalar;
-use raytracer_rs::tuples::vector::Vector;
+use yart::pixels::canvas::Canvas;
+use yart::pixels::color::Color;
+use yart::pixels::ppm::PPM;
+use yart::tuples::coordinates::Coordinates;
+use yart::tuples::point::Point;
+use yart::tuples::scalar::Scalar;
+use yart::tuples::vector::Vector;
 
 #[derive(Clone, Copy, Debug)]
 struct Projectile {
